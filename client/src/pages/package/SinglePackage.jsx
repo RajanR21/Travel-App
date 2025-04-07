@@ -23,6 +23,20 @@ let images = [
   "https://tse2.mm.bing.net/th?id=OIP.cM5fTf5111EpDNGrcqLLCwHaFS&pid=Api&P=0&h=180",
   "https://tse1.mm.bing.net/th?id=OIP.s2jYIJY_CSSlvtdhauPY3wHaE7&pid=Api&P=0&h=180",
 ];
+
+const features = [
+  "Free Airport Taxi",
+  "All Meals Included",
+  "Self Catering",
+  "Complimentary Spa Access",
+  "Guided City Tour",
+  "Free Wi-Fi",
+  "Ocean View Room",
+  "Kids Stay Free",
+  "Late Checkout",
+  "Welcome Drink on Arrival",
+];
+
 const SinglePackage = ({ item }) => {
   // console.log("item", item);
   return (
@@ -31,9 +45,11 @@ const SinglePackage = ({ item }) => {
       <div className="siDesc">
         <h1 className="siTitle">{item?.name}</h1>
         <span className="siDistance">{item?.address}</span>
-        <span className="siTaxiOp">Free airport taxi</span>
+        <span className="siTaxiOp">
+          {features[Math.floor(Math.random() * features.length)]}
+        </span>
         <span className="siSubtitle">
-          Studio Apartment with Air conditioning
+          {`${item.days} Days and ${item.days - 1} Nights`}
         </span>
         <span className="siFeatures">{item.directions}</span>
         <span className="siCancelOp">Free cancellation </span>

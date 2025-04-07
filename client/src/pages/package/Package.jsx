@@ -29,6 +29,7 @@ const Package = () => {
   const [openModal, setOpenModal] = useState(false);
   const BASEURL = process.env.REACT_APP_BASEURL;
   let [searchParams, setSearchParams] = useSearchParams();
+
   const session_id = searchParams.get("session_id");
   console.log("session id", session_id);
   // const { user } = useContext(AuthContext);
@@ -41,7 +42,7 @@ const Package = () => {
   //   const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
   //   return diffDays;
   // }
-  const user = localStorage.getItem("status");
+  // const user = localStorage.getItem("status");
   const token = localStorage.getItem("user");
 
   const getPackagedata = async () => {
@@ -90,19 +91,11 @@ const Package = () => {
   });
 
   const handleClick = () => {
-    if (user == "true") {
-      setOpenModal(true);
-    } else {
-      if (!token) {
-        toast.error("UnAuthorised , Register First");
-        navigate("/register");
-      }
-
-      if (user == "false") {
-        toast.error("UnAuthorised , Login First");
-        navigate("/login");
-      }
+    if (!token) {
+      toast.error("UnAuthorised , Login First");
+      navigate("/login");
     }
+    setOpenModal(true);
   };
   return (
     <div>
