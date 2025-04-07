@@ -39,9 +39,8 @@ const Flight = () => {
   //   return diffDays;
   // }
 
-  const user = localStorage.getItem("status");
   const token = localStorage.getItem("user");
-
+  console.log("flight ka id", id);
   const getFlightdata = async () => {
     let url = `${BASEURL}flights/${id}`;
 
@@ -57,7 +56,7 @@ const Flight = () => {
     isSuccess: flightFlag,
     isLoading: loading,
   } = useQuery({
-    queryKey: ["packages"],
+    queryKey: ["flights"],
     queryFn: async () => await getFlightdata(),
     keepPreviousData: true,
   });
@@ -79,7 +78,7 @@ const Flight = () => {
     },
     onSuccess: (data) => {
       toast.success("Flight Booked Successfully");
-      navigate("/packages");
+      navigate("/flights");
     },
     onError: (err) => {
       toast.error(err.response.data.message);
@@ -88,19 +87,12 @@ const Flight = () => {
   });
 
   const handleClick = () => {
-    if (user == "false") {
-      setOpenModal(true);
-    } else {
-      if (!token) {
-        toast.error("UnAuthorised , Register First");
-        navigate("/register");
-      }
-
-      if (user == "false") {
-        toast.error("UnAuthorised , Login First");
-        navigate("/login");
-      }
+    if (!token) {
+      toast.error("UnAuthorised , Login First");
+      navigate("/login");
     }
+
+    setOpenModal(true);
   };
   return (
     <div>
@@ -140,7 +132,7 @@ const Flight = () => {
             {data?.fromCity} to {data?.toCity}
           </span>
           <span className="hotelPriceHighlight">
-            Book this packag at ${data?.price} - Enjoy your Journey
+            Book this flight at ${data?.price} - Enjoy your Journey
           </span>
 
           <div className="hotelDetails">
