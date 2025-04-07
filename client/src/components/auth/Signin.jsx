@@ -11,7 +11,7 @@ import { setToken } from "../../redux/authslices";
 import toast from "react-hot-toast";
 import { handleSignIn } from "../../controllers/authController.js";
 
-//////// yup validation for the form data
+// yup validation for the form data
 
 let schema = yup.object({
   password: yup
@@ -28,7 +28,7 @@ let schema = yup.object({
 
 function Signin() {
   const navigate = useNavigate();
-  let token = useSelector((state) => state?.auth?.token);
+  // let token = useSelector((state) => state?.auth?.token);
   const status = localStorage.getItem("status");
 
   // console.log(token, typeof token);
@@ -43,24 +43,24 @@ function Signin() {
       return handleSignIn(data);
     },
     onSuccess: (data) => {
+      localStorage.setItem("user", data?.token);
       dispatch(setToken(data?.token));
-      toast.success("Login in Successfully");
 
-      localStorage.setItem("status", true);
-      // navigate("/products", { flg: true });
+      toast.success("Login in Successfully");
       navigate("/");
     },
     onError: (err) => {
       if (err.response.status == 401) {
         navigate("/register");
       }
-      if (err.response.status == 402) {
-        navigate("/verify-otp");
-      }
-      toast.error(err.response.data.message);
+      // if (err.response.status == 402) {
+      //   navigate("/verify-otp");
+      // }
+      toast.error(err?.response?.data?.message || "Erro While Login User");
       // handleError("Something went Wrong !!! Try again");
     },
   });
+
   const { register, handleSubmit, formState } = useForm({
     defaultValues: {
       password: "123456789",
@@ -72,7 +72,7 @@ function Signin() {
   const { errors } = formState;
   return (
     <div className="signupscreen">
-      {!status || status == "false" ? (
+      {
         <div className="container mt-5 pl-96">
           <div className="innerContainer ">
             <div
@@ -109,9 +109,7 @@ function Signin() {
             </form>
           </div>
         </div>
-      ) : (
-        <h1>You are already Logged in</h1>
-      )}
+      }
     </div>
   );
 }

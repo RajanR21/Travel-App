@@ -8,6 +8,7 @@ import "./signup.css";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { handleError, handleSignUp } from "../../controllers/authController";
+import { useDispatch } from "react-redux";
 
 //////// yup validation for the form data
 
@@ -37,7 +38,7 @@ let schema = yup.object({
 
 function Signup() {
   //   if (loading) return <h1>Loading...</h1>;
-  const user = localStorage.getItem("status");
+
   const navigate = useNavigate();
   const { mutate } = useMutation({
     mutationFn: (data) => {
@@ -45,8 +46,8 @@ function Signup() {
     },
     onSuccess: (data) => {
       toast.success(data.message || "Register Successful");
-      if (user != "true") localStorage.setItem("status", false);
-      if (user == "false") navigate("/verify-otp");
+
+      navigate("/login");
     },
     onError: (err) => {
       toast.error(err.response.data.message);
