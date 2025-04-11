@@ -5,8 +5,6 @@ import MailList from "../../components/mailList/MailList";
 import Footer from "../../components/footer/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCircleArrowLeft,
-  faCircleArrowRight,
   faCircleXmark,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
@@ -29,32 +27,29 @@ const Hotel = () => {
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const BASEURL = process.env.REACT_APP_BASEURL;
-  const token = localStorage.getItem("user");
+
   let [searchParams, setSearchParams] = useSearchParams();
   const session_id = searchParams.get("session_id");
   console.log("session id", session_id);
   // const { user } = useContext(AuthContext);
-  const user = localStorage.getItem("status");
   const navigate = useNavigate();
 
   const { dates, options } = useSelector((state) => state.hotel.filterData);
   const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 
-  function dayDifference(date1, date2) {
-    const timeDiff = Math.abs(date2.getTime() - date1.getTime());
-    const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
-    return diffDays;
-  }
+  // function dayDifference(date1, date2) {
+  //   const timeDiff = Math.abs(date2.getTime() - date1.getTime());
+  //   const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
+  //   return diffDays;
+  // }
 
-  const days = dayDifference(dates[0].endDate, dates[0].startDate);
+  // const days = dayDifference(dates[0].endDate, dates[0].startDate);
+
+  const token = localStorage.getItem("user");
 
   const getHoteldata = async () => {
     console.log("form dta", data);
     let base = `${BASEURL}hotels/${id}`;
-
-    let url = ``;
-
-    base += url;
 
     try {
       const res = await axios.get(base);
@@ -99,21 +94,12 @@ const Hotel = () => {
   });
 
   const handleClick = () => {
-    if (!user) {
+    if (!token) {
+      toast.error("UnAuthorised , Login First");
+      navigate("/login");
     }
-    if (user == "true") {
-      setOpenModal(true);
-    } else {
-      if (!token) {
-        toast.error("UnAuthorised , Register First");
-        navigate("/register");
-      }
 
-      if (user == "false") {
-        toast.error("UnAuthorised , Login First");
-        navigate("/login");
-      }
-    }
+    setOpenModal(true);
   };
   return (
     <div>
