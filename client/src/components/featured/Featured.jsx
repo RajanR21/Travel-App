@@ -1,5 +1,4 @@
 import axios from "axios";
-import useFetch from "../../hooks/useFetch";
 import "./featured.css";
 import { useQuery } from "@tanstack/react-query";
 

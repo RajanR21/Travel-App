@@ -25,6 +25,20 @@ let images = [
   "https://tse2.mm.bing.net/th?id=OIP.cM5fTf5111EpDNGrcqLLCwHaFS&pid=Api&P=0&h=180",
   "https://tse1.mm.bing.net/th?id=OIP.s2jYIJY_CSSlvtdhauPY3wHaE7&pid=Api&P=0&h=180",
 ];
+
+const hotelFeatures = [
+  "Free Breakfast Included",
+  "Swimming Pool Access",
+  "Pet Friendly Rooms",
+  "Rooftop Bar & Lounge",
+  "In-Room Dining Service",
+  "Gym & Fitness Center",
+  "Business Conference Room",
+  "24/7 Room Service",
+  "City Skyline View",
+  "Complimentary Parking",
+];
+
 const SearchItem = ({ item }) => {
   return (
     <div className="searchItem">
@@ -32,10 +46,10 @@ const SearchItem = ({ item }) => {
       <div className="siDesc">
         <h1 className="siTitle">{item?.name}</h1>
         <span className="siDistance">{item?.address}</span>
-        <span className="siTaxiOp">Free airport taxi</span>
-        <span className="siSubtitle">
-          Studio Apartment with Air conditioning
+        <span className="siTaxiOp">
+          {hotelFeatures[Math.floor(Math.random() * hotelFeatures.length)]}
         </span>
+        <Link>{item?.url}</Link>
         <span className="siFeatures">{item.directions}</span>
         <span className="siCancelOp">Free cancellation </span>
         <span className="siCancelOpSubtitle">
@@ -45,7 +59,13 @@ const SearchItem = ({ item }) => {
       <div className="siDetails">
         {item.rating && (
           <div className="siRating">
-            <span>Excellent</span>
+            <span>
+              {item.rating >= 4
+                ? "Excellent"
+                : item.rating >= 3
+                ? "Average"
+                : "Poor"}
+            </span>
             <button>{item.rating}</button>
           </div>
         )}
