@@ -17,7 +17,7 @@ export const AllPackagesFilter = async (req, res) => {
     const matchStage = {};
 
     if (city) {
-      matchStage["city"] = city;
+      matchStage["city"] = { $regex: new RegExp(city, "i") }; // Case-insensitive match
     }
     if (minPrice) {
       matchStage["price"] = { $gte: parseInt(minPrice) };

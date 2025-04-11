@@ -18,10 +18,7 @@ export const AllHotelsFilter = async (req, res) => {
     const matchStage = {};
 
     if (city) {
-      matchStage["city"] = city;
-    }
-    if (country) {
-      matchStage["country"] = country;
+      matchStage["city"] = { $regex: new RegExp(city, "i") }; // Case-insensitive match
     }
     if (minRating) {
       matchStage["rating"] = { $gte: parseInt(minRating) };

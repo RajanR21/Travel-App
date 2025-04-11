@@ -26,10 +26,10 @@ export const AllFlightsFilter = async (req, res) => {
     const matchStage = {};
 
     if (source) {
-      matchStage["fromCity"] = source;
+      matchStage["fromCity"] = { $regex: new RegExp(source, "i") };
     }
     if (destination) {
-      matchStage["toCity"] = destination;
+      matchStage["toCity"] = { $regex: new RegExp(destination, "i") };
     }
 
     if (noOfStops) {
