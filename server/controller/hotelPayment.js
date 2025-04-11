@@ -21,6 +21,7 @@ export const paymentForHotel = async (req, res) => {
     const bookedData = await bookHotel.findOne({ HotelBooked: hotelId }).lean();
 
     console.log("payment", hotelData, hotelId);
+
     if (!hotelData) {
       return res.status(404).send({
         status: false,
@@ -52,7 +53,9 @@ export const paymentForHotel = async (req, res) => {
 
     // console.log("session", session);
 
-    res.status(200).json({ url: session.url, message: "Comlete The Payment " });
+    res
+      .status(200)
+      .json({ url: session.url, message: "Complete The Payment " });
   } catch (e) {
     // console.error("Error:", e);
     res.status(500).json({ error: e.message });

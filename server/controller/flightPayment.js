@@ -14,7 +14,7 @@ export const paymentForFlight = async (req, res) => {
       return res.status(400).send({
         status: false,
         message: "Please Select a Flight",
-        url: `http://localhost:3000/flights/${flightId}`,
+        // url: `http://localhost:3000/flights/${flightId}`,
       });
     }
 
@@ -24,11 +24,12 @@ export const paymentForFlight = async (req, res) => {
       .lean();
 
     console.log("payment", flightData, flightId);
+
     if (!flightData) {
       return res.status(404).send({
         status: false,
         message: "Flight not found",
-        url: `http://localhost:3000/flights/${flightId}`,
+        // url: `http://localhost:3000/flights/${flightId}`,
       });
     }
 
@@ -54,17 +55,15 @@ export const paymentForFlight = async (req, res) => {
       cancel_url: `http://localhost:3000/flights/${flightId}?session_id={CHECKOUT_SESSION_ID}&flightId=${flightId}`,
     });
 
-    // console.log("session", session);
+    console.log("session", session);
 
-    res.json({ url: session.url });
+    res.json({ url: session.url, message: "Complete The Payment " });
   } catch (e) {
     // console.error("Error:", e);
-    res
-      .status(500)
-      .json({
-        error: e.message,
-        url: `http://localhost:3000/flights/${flightId}`,
-      });
+    res.status(500).json({
+      error: e.message,
+      // url: `http://localhost:3000/flights/${flightId}`,
+    });
   }
 };
 

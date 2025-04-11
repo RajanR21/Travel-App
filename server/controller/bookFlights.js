@@ -1,7 +1,7 @@
 import { validationResult } from "express-validator";
 import { bookFlight } from "../models/bookFlights.js";
 
-const handleBookFlight = async (req, res, next) => {
+export const handleBookFlight = async (req, res, next) => {
   console.log("coming in book flight", req?.params?.id);
 
   const errors = validationResult(req);
@@ -12,6 +12,7 @@ const handleBookFlight = async (req, res, next) => {
       message: err,
     });
   }
+
   const { name, adult, child, email } = req.body;
   const flightId = req?.params?.id;
   console.log(req.body);
@@ -57,5 +58,3 @@ const handleBookFlight = async (req, res, next) => {
 
   next();
 };
-
-export { handleBookFlight };
