@@ -6,12 +6,12 @@ const BASEURL = process.env.REACT_APP_BASEURL;
 
 export async function handleSignUp(data) {
   console.log("inside signup handler", data);
+
   try {
     const res = await axios.post(`${BASEURL}user/register`, data);
-    console.log(res.data);
-    localStorage.setItem("user", res.data.token);
+    console.log(res?.data);
 
-    return res.data;
+    return res?.data;
   } catch (error) {
     throw error;
   }
