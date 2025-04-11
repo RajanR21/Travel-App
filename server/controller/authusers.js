@@ -9,6 +9,7 @@ export const handleLogin = async function (req, res) {
   console.log("agaya", req.body);
 
   const errors = validationResult(req);
+
   if (!errors.isEmpty()) {
     const err = errors.array();
     return res.status(400).send({
@@ -29,13 +30,13 @@ export const handleLogin = async function (req, res) {
         message: "Unauthorised , Register First",
       });
 
-    let OtpData = await Otp.findOne({ createdBy: userExist._id });
-    if (!OtpData.isverified) {
-      return res.status(402).send({
-        status: false,
-        message: "Please Verify Otp First",
-      });
-    }
+    // let OtpData = await Otp.findOne({ createdBy: userExist._id });
+    // if (!OtpData.isverified) {
+    //   return res.status(402).send({
+    //     status: false,
+    //     message: "Please Verify Otp First",
+    //   });
+    // }
 
     let isSamePass = await bcrypt.compare(password, userExist.password);
 
@@ -45,10 +46,17 @@ export const handleLogin = async function (req, res) {
         message: "Passsword Is Incorrect",
       });
     } else {
+      const token = jwt.sign({ email: email }, process.env.SECERATE, {
+        expiresIn: "1h",
+      });
+      console.log("token generated", token);
+
       await User.updateOne({ email: email }, { isverified: true });
+
       return res.status(200).send({
-        status: false,
+        status: true,
         message: "Login Successfuly",
+        token: token,
       });
     }
   } catch (err) {
@@ -81,10 +89,7 @@ export const handleRegister = async (req, res) => {
       });
     }
 
-    const captcha = getCaptcha();
-    const token = jwt.sign({ email: email }, process.env.SECERATE);
-
-    console.log("token generated", token);
+    // const captcha = getCaptcha();
 
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -97,30 +102,30 @@ export const handleRegister = async (req, res) => {
 
       // console.log(process.env.EMAIL, process.env.PASSWORD);
       // const captchaDataURL = generateCaptcha();
-      const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: process.env.EMAIL,
-          pass: process.env.PASSWORD,
-        },
-      });
+      // const transporter = nodemailer.createTransport({
+      //   service: "gmail",
+      //   auth: {
+      //     user: process.env.EMAIL,
+      //     pass: process.env.PASSWORD,
+      //   },
+      // });
 
-      const mailOption = {
-        from: process.env.EMAIL,
-        to: email,
-        subject: "Authentication successfuly done ",
-        html: `
-                <h1>Congratulations! You've received an email: ${captcha}</h1>
-                    <p>Please find the captcha</p>
-                   `,
-      };
+      // const mailOption = {
+      //   from: process.env.EMAIL,
+      //   to: email,
+      //   subject: "Authentication successfuly done ",
+      //   html: `
+      //           <h1>Congratulations! You've received an email: ${captcha}</h1>
+      //               <p>Please find the captcha</p>
+      //              `,
+      // };
 
-      transporter.sendMail(mailOption, (error, info) => {
-        if (error) console.log("Error", error);
-        else {
-          console.log("Email sent" + info.response);
-        }
-      });
+      // transporter.sendMail(mailOption, (error, info) => {
+      //   if (error) console.log("Error", error);
+      //   else {
+      //     console.log("Email sent" + info.response);
+      //   }
+      // });
     } catch (error) {
       return res.status(401).json({
         status: 401,
@@ -128,11 +133,12 @@ export const handleRegister = async (req, res) => {
       });
     }
 
-    let userId = await User.findOne({ email });
-    await Otp.create({
-      otp: captcha,
-      createdBy: userId._id,
-    });
+    // let userId = await User.findOne({ email });
+    // await Otp.create({
+    //   otp: captcha,
+    //   createdBy: userId._id,
+    // });
+
     return res.status(201).send({
       status: true,
       messsage: "Register Successfuly And Otp Send To Your E-Mail",
